@@ -3,9 +3,7 @@ package org.example.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.context.annotation.SessionScope;
 
-@SessionScope
 @Getter
 @Setter
 @Entity
@@ -13,8 +11,7 @@ import org.springframework.web.context.annotation.SessionScope;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public String pseudo;
-    public String password;
 
+    public String password;
 }
