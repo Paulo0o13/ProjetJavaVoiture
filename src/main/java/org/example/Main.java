@@ -28,6 +28,7 @@ public static void main(String[] args) { SpringApplication.run(Main.class, args)
 
         List<Car> allCars =  carRepository.findAll();
 
+
         System.out.println("All items in repository: "+ carRepository.findAll());
 
 

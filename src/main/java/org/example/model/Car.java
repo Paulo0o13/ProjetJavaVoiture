@@ -15,6 +15,7 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
+
     public String marque;
     public String modele;
     public String couleur;
