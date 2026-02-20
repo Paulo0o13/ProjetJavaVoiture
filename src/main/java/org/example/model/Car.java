@@ -1,5 +1,9 @@
 package org.example.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.context.annotation.SessionScope;
@@ -7,17 +11,19 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 @Getter
 @Setter
+@Entity
 public class Car {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
     public String marque;
     public String modele;
     public String couleur;
     public int annee;
 
-    public Car(String marque, String modele, String couleur, int annee) {
-        this.marque = marque;
-        this.modele = modele;
-        this.couleur = couleur;
-        this.annee = annee;
+
+    public Car() {
+
     }
 }
