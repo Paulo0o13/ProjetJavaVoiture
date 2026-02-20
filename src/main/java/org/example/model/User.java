@@ -9,16 +9,12 @@ import org.springframework.web.context.annotation.SessionScope;
 @Getter
 @Setter
 @Entity
-@Table(name = "cars")
-public class Car {
+@Table(name = "users")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
-
-    public String marque;
-    public String modele;
-    public String couleur;
-    public int annee;
+    public String pseudo;
+    public String password;
 
 }
