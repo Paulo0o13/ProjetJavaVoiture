@@ -9,26 +9,26 @@
 <div class="container" style="max-width: 500px; margin: 0 auto;">
     <h2 class="mb-4">Informations de la voiture</h2>
 
-    <form th:action="@{/car}" th:="${car}" method="post">
+    <form th:action="@{/car}" th:object="${car}" method="post">
 
         <div class="mb-3">
             <label class="form-label">Marque :</label>
-            <input class="form-control" type="text" th:field="${marque}" required>
+            <input class="form-control" type="text" th:field="*{marque}" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Modèle :</label>
-            <input class="form-control" type="text" th:field="${modele}" required>
+            <input class="form-control" type="text" th:field="*{modele}" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Couleur :</label>
-            <input class="form-control" type="text" th:field="${couleur}" required>
+            <input class="form-control" type="text" th:field="*{couleur}" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Année :</label>
-            <input class="form-control" type="number" th:field="${annee}" required>
+            <input class="form-control" type="number" th:field="*{annee}" required>
         </div>
 
         <button type="submit" class="btn btn-dark w-100">Valider</button>
