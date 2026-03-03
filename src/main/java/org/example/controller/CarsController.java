@@ -26,11 +26,10 @@ public class CarsController {
     public String findAllCars(Model model) {
         List<Car> cars = this.carRepository.findAll();
         model.addAttribute("cars", cars);
-        model.addAttribute("car", new Car());
         return "formCar";
     }
 
-    @PostMapping("/car")
+    @PostMapping("/carppp")
     public Car addOneCar(@RequestBody Car car) {
         return this.carRepository.save(car);
     }
