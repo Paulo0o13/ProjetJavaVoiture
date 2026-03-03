@@ -29,7 +29,7 @@ public class CarsController {
         return "formCar";
     }
 
-    @PostMapping("/carppp")
+    @PostMapping("/car")
     public Car addOneCar(@RequestBody Car car) {
         return this.carRepository.save(car);
     }
