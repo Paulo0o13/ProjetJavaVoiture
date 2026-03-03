@@ -1,44 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Liste des voitures</title>
-    <script
-            src="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js">
-    </script>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
+    <title>Mes voitures - Liste</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
 </head>
-<body class="p-4">
-<div class="container" style="max-width: 800px; margin: 0 auto;">
-<h2 class="mb-4 text-center">Liste des voitures</h2>
+<body class="bg-light">
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-bordered shadow-sm">
-        <thead class="table-dark">
-        <tr>
-            <th>Marque</th>
-            <th>Modèle</th>
-            <th>Couleur</th>
-            <th>Année</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="c : ${cars}">
-            <td th:text="${c.marque}"></td>
-            <td th:text="${c.modele}"></td>
-            <td th:text="${c.couleur}"></td>
-            <td th:text="${c.annee}"></td>
-        </tr>
-        </tbody>
-    </table>
+<div class="page">
+    <header class="navbar navbar-expand-md navbar-dark d-print-none bg-dark">
+        <div class="container-xl">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-hob">
+                Mes voitures
+            </h1>
+            <div class="navbar-nav flex-row order-md-last">
+                <div class="nav-item d-none d-md-flex me-3">
+                    <span class="nav-link px-0 text-white">
+                        Bienvenue, <strong th:text="${session.loggedUser.pseudo}" class="ms-1">Utilisateur</strong>
+                    </span>
+                </div>
+                <div class="nav-item">
+                    <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm">Déconnexion</a>
+                </div>
+            </div>
+        </div>
+    </header>
 
-    <div th:if="${#lists.isEmpty(cars)}" class="alert alert-info text-center">
-        Aucune voiture n'a été trouvée dans la base de données.
+    <div class="page-wrapper">
+        <div class="container-xl py-4">
+            <div class="page-header d-print-none mb-4">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">Mes Voitures</h2>
+                        <div class="text-muted mt-1">Gérez votre collection personnelle.</div>
+                    </div>
+                    <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
+                            <a th:href="@{/car}" class="btn btn-primary d-none d-sm-inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+                                Ajouter une voiture
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-vcenter card-table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Marque</th>
+                            <th>Modèle</th>
+                            <th>Couleur</th>
+                            <th>Année</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="c : ${cars}">
+                            <td th:text="${c.marque}" class="fw-bold">Marque</td>
+                            <td th:text="${c.modele}" class="text-secondary">Modèle</td>
+                            <td th:text="${c.couleur}">Couleur</td>
+                            <td th:text="${c.annee}">2000</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div th:if="${#lists.isEmpty(cars)}" class="empty py-5">
+                    <div class="empty-icon text-muted">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <circle cx="10" cy="10" r="7" />
+                            <line x1="21" y1="21" x2="15" y2="15" />
+                        </svg>
+                    </div>
+                    <p class="empty-title">Aucune voiture trouvée</p>
+                    <p class="empty-subtitle text-muted">
+                        Vous n'avez pas encore enregistré de véhicule dans votre garage.
+                    </p>
+                    <div class="empty-action">
+                        <a th:href="@{/car}" class="btn btn-primary">
+                            Enregistrer ma première voiture
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<a th:href="@{/car}" class="btn btn-primary">Retour au formulaire</a>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js"></script>
 </body>
 </html>

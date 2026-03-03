@@ -2,42 +2,38 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion</title>
+    <title>Inscription - Garage</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
 </head>
 <body class="d-flex flex-column bg-light" style="min-height: 100vh; justify-content: center;">
 
 <div class="container container-tight py-4">
     <div class="text-center mb-4">
-        <h1>Mes Voitures</h1>
+        <h1>🚗 Mon Garage</h1>
     </div>
 
     <div class="card card-md">
         <div class="card-body">
-            <h2 class="card-title text-center mb-4">Connectez-vous à votre compte</h2>
+            <h2 class="card-title text-center mb-4">Créer un nouveau compte</h2>
 
-            <div th:if="${param.error}" class="alert alert-danger">
-                Pseudo ou mot de passe incorrect.
-            </div>
-
-            <form th:action="@{/login}" method="post" autocomplete="off">
+            <form th:action="@{/register}" th:object="${user}" method="post">
                 <div class="mb-3">
-                    <label class="form-label">Nom d'utilisateur (Pseudo)</label>
-                    <input type="text" name="pseudo" class="form-control" placeholder="Entrez votre pseudo" required>
+                    <label class="form-label">Pseudo choisi</label>
+                    <input type="text" th:field="*{pseudo}" class="form-control" placeholder="Ex: JeanDupont" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Mot de passe</label>
-                    <input type="password" name="password" class="form-control" placeholder="Mot de passe" required>
+                    <input type="password" th:field="*{password}" class="form-control" placeholder="Créez un mot de passe" required>
                 </div>
                 <div class="form-footer">
-                    <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+                    <button type="submit" class="btn btn-success w-100">Créer mon compte</button>
                 </div>
             </form>
         </div>
     </div>
 
     <div class="text-center text-secondary mt-3">
-        Pas encore de compte ? <a th:href="@{/register}" tabindex="-1">S'inscrire</a>
+        Déjà un compte ? <a th:href="@{/login}">Se connecter</a>
     </div>
 </div>
 

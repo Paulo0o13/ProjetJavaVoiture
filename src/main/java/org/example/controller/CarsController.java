@@ -1,7 +1,10 @@
 package org.example.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.model.Car;
+import org.example.model.User;
 import org.example.repository.CarRepository;
+import org.example.service.CarService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,31 +14,39 @@ import java.util.List;
 @Controller
 public class CarsController {
 
-    private final CarRepository carRepository;
+    private final CarService carService;
+    private final CarRepository carRepository; // Pour la requête filtrée
 
-    public CarsController(CarRepository carRepository) {
+    public CarsController(CarService carService, CarRepository carRepository) {
+        this.carService = carService;
         this.carRepository = carRepository;
     }
 
-    // 1. Affiche UNIQUEMENT le formulaire sur /car
     @GetMapping("/car")
-    public String showForm(Model model) {
+    public String showForm(Model model, HttpSession session) {
+        if (session.getAttribute("loggedUser") == null) return "redirect:/login";
+
         model.addAttribute("car", new Car());
         return "formCar";
     }
 
-    // 2. Sauvegarde et redirige vers la liste des voitures (/cars)
     @PostMapping("/car")
-    public String addOneCar(@ModelAttribute("car") Car car) {
-        this.carRepository.save(car);
-        // On redirige vers la nouvelle URL
+    public String addOneCar(@ModelAttribute("car") Car car, HttpSession session) {
+        User user = (User) session.getAttribute("loggedUser");
+        if (user == null) return "redirect:/login";
+
+        car.setOwner(user); // On lie la voiture à l'utilisateur connecté
+        this.carService.saveCar(car);
         return "redirect:/cars";
     }
 
-    // 3. Affiche UNIQUEMENT la liste sur /cars
     @GetMapping("/cars")
-    public String findAllCars(Model model) {
-        List<Car> cars = this.carRepository.findAll();
+    public String findAllCars(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("loggedUser");
+        if (user == null) return "redirect:/login";
+
+        // IMPORTANT : On ne récupère que les voitures du pseudo connecté
+        List<Car> cars = this.carRepository.findByOwnerPseudo(user.getPseudo());
         model.addAttribute("cars", cars);
         return "listCar";
     }

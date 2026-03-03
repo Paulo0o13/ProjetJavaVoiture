@@ -19,4 +19,8 @@ public class Car {
     public String couleur;
     public int annee;
 
+    @ManyToOne
+    @JoinColumn(name = "user_pseudo")
+    private User owner;
+
 }
