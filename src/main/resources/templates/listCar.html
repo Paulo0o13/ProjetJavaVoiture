@@ -9,10 +9,11 @@
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
 </head>
-<body>
-<h2 class="mb-4 mt-3 text-center">Liste des voitures</h2>
+<body class="p-4">
+<div class="container" style="max-width: 800px; margin: 0 auto;">
+<h2 class="mb-4 text-center">Liste des voitures</h2>
 
-<div>
+<div class="table-responsive">
     <table class="table table-striped table-hover table-bordered shadow-sm">
         <thead class="table-dark">
         <tr>
@@ -24,10 +25,10 @@
         </thead>
         <tbody>
         <tr th:each="c : ${cars}">
-            <td th:text="${c.marque}">Marque générique</td>
-            <td th:text="${c.modele}">Modèle générique</td>
-            <td th:text="${c.couleur}">Couleur générique</td>
-            <td th:text="${c.annee}">2000</td>
+            <td th:text="${c.marque}"></td>
+            <td th:text="${c.modele}"></td>
+            <td th:text="${c.couleur}"></td>
+            <td th:text="${c.annee}"></td>
         </tr>
         </tbody>
     </table>
@@ -35,10 +36,9 @@
     <div th:if="${#lists.isEmpty(cars)}" class="alert alert-info text-center">
         Aucune voiture n'a été trouvée dans la base de données.
     </div>
-
-
 </div>
 
 <a th:href="@{/car}" class="btn btn-primary">Retour au formulaire</a>
+</div>
 </body>
 </html>
