@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <title>Connexion</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
+    <link rel="stylesheet" th:href="@{/bg.css}" />
 </head>
-<body class="d-flex flex-column bg-light" style="min-height: 100vh; justify-content: center;">
+
+<body class="d-flex flex-column" style="min-height: 100vh; justify-content: center;">
 
 <div class="container container-tight py-4">
     <div class="text-center mb-4">
-        <h1>Mes Voitures</h1>
+        <h1 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Mes Voitures</h1>
     </div>
 
-    <div class="card card-md">
+    <div class="card card-md shadow-lg glass-card">
         <div class="card-body">
             <h2 class="card-title text-center mb-4">Connectez-vous à votre compte</h2>
 
@@ -23,21 +25,21 @@
             <form th:action="@{/login}" method="post" autocomplete="off">
                 <div class="mb-3">
                     <label class="form-label">Nom d'utilisateur (Pseudo)</label>
-                    <input type="text" name="pseudo" class="form-control" placeholder="Entrez votre pseudo" required>
+                    <input type="text" name="pseudo" class="form-control glass-input" placeholder="Entrez votre pseudo" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Mot de passe</label>
-                    <input type="password" name="password" class="form-control" placeholder="Mot de passe" required>
+                    <input type="password" name="password" class="form-control glass-input" placeholder="Mot de passe" required>
                 </div>
                 <div class="form-footer">
-                    <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+                    <button type="submit" class="btn btn-custom w-100">Se connecter</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="text-center text-secondary mt-3">
-        Pas encore de compte ? <a th:href="@{/register}" tabindex="-1">S'inscrire</a>
+    <div class="text-center mt-3" style="color: rgba(255,255,255,0.9);">
+        Pas encore de compte ? <a th:href="@{/register}" tabindex="-1" style="color: white; font-weight: bold; text-decoration: underline;">S'inscrire</a>
     </div>
 </div>
 

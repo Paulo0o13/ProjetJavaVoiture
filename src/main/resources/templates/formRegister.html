@@ -4,36 +4,91 @@
     <meta charset="UTF-8">
     <title>Inscription - Garage</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #2a4c54 0%, #6e9987 50%, #d8e1d5 100%);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2) !important;
+            border-radius: 16px;
+        }
+
+
+        .glass-card .card-title,
+        .glass-card .form-label {
+            color: #ffffff !important;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.2) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            color: white !important;
+        }
+
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2) !important;
+            border-color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+
+        .btn-custom {
+            background-color: #3b5c64 !important;
+            border-color: #3b5c64 !important;
+            color: white !important;
+            font-weight: bold;
+        }
+        .btn-custom:hover {
+            background-color: #2a444a !important;
+        }
+    </style>
 </head>
-<body class="d-flex flex-column bg-light" style="min-height: 100vh; justify-content: center;">
+
+<body class="d-flex flex-column" style="min-height: 100vh; justify-content: center;">
 
 <div class="container container-tight py-4">
     <div class="text-center mb-4">
-        <h1>🚗 Mon Garage</h1>
+        <h1 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Inscription</h1>
     </div>
 
-    <div class="card card-md">
+    <div class="card card-md glass-card">
         <div class="card-body">
             <h2 class="card-title text-center mb-4">Créer un nouveau compte</h2>
 
             <form th:action="@{/register}" th:object="${user}" method="post">
                 <div class="mb-3">
                     <label class="form-label">Pseudo choisi</label>
-                    <input type="text" th:field="*{pseudo}" class="form-control" placeholder="Ex: JeanDupont" required>
+                    <input type="text" th:field="*{pseudo}" class="form-control glass-input" placeholder="Ex: JeanDupont" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Mot de passe</label>
-                    <input type="password" th:field="*{password}" class="form-control" placeholder="Créez un mot de passe" required>
+                    <input type="password" th:field="*{password}" class="form-control glass-input" placeholder="Créez un mot de passe" required>
                 </div>
                 <div class="form-footer">
-                    <button type="submit" class="btn btn-success w-100">Créer mon compte</button>
+                    <button type="submit" class="btn btn-custom w-100">Créer mon compte</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="text-center text-secondary mt-3">
-        Déjà un compte ? <a th:href="@{/login}">Se connecter</a>
+    <div class="text-center mt-3" style="color: rgba(255,255,255,0.9);">
+        Déjà un compte ? <a th:href="@{/login}" style="color: white; font-weight: bold; text-decoration: underline;">Se connecter</a>
     </div>
 </div>
 

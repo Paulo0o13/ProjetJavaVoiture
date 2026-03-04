@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<header th:fragment="maNavbar" class="navbar navbar-expand-md d-print-none bg-dark" data-bs-theme="dark">
+    <div class="container-xl">
+        <h1 class="navbar-brand navbar-brand-autodark d-none-hob">
+            <span class="text-white">Mes voitures</span>
+        </h1>
+        <div class="navbar-nav flex-row order-md-last">
+            <div class="nav-item d-none d-md-flex me-3">
+                    <span class="nav-link px-0 text-white">
+                        Bienvenue, <strong th:text="${session.loggedUser != null ? session.loggedUser.pseudo : 'Utilisateur'}" class="ms-1">Utilisateur</strong>
+                    </span>
+            </div>
+            <div class="nav-item">
+                <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm">Déconnexion</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+</body>
+</html>

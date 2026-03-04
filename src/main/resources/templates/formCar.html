@@ -3,38 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <title>Ajout de Voiture</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
+    <link rel="stylesheet" th:href="@{/bg.css}" />
 </head>
-<body class="p-4">
-<div class="container" style="max-width: 500px; margin: 0 auto;">
-    <h2 class="mb-4">Informations de la voiture</h2>
+<body class="d-flex flex-column" style="min-height: 100vh;">
 
-    <form th:action="@{/car}" th:object="${car}" method="post">
+<div class="page">
 
-        <div class="mb-3">
-            <label class="form-label">Marque :</label>
-            <input class="form-control" type="text" th:field="*{marque}" required>
+    <div th:replace="~{navbar :: maNavbar}"></div>
+
+    <div class="page-wrapper">
+        <div class="container p-4 mt-4" style="max-width: 600px; margin: 0 auto;">
+
+            <div class="card shadow-lg border-0 glass-card">
+                <div class="card-header pt-4 pb-3 border-bottom-0">
+                    <h2 class="mb-0 text-center w-100">Informations de la voiture</h2>
+                </div>
+
+                <div class="card-body p-4">
+                    <form th:action="@{/car}" th:object="${car}" method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Marque :</label>
+                            <input class="form-control glass-input" type="text" th:field="*{marque}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Modèle :</label>
+                            <input class="form-control glass-input" type="text" th:field="*{modele}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Couleur :</label>
+                            <input class="form-control glass-input" type="text" th:field="*{couleur}" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Année :</label>
+                            <input class="form-control glass-input" type="number" th:field="*{annee}" required>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-custom">Ajouter +</button>
+                            <a th:href="@{/cars}" class="btn btn-outline-custom">Afficher la liste</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
         </div>
-
-        <div class="mb-3">
-            <label class="form-label">Modèle :</label>
-            <input class="form-control" type="text" th:field="*{modele}" required>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Couleur :</label>
-            <input class="form-control" type="text" th:field="*{couleur}" required>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Année :</label>
-            <input class="form-control" type="number" th:field="*{annee}" required>
-        </div>
-
-        <button type="submit" class="btn btn-dark w-100 mb-3">Ajouter +</button>
-        <a th:href="@{/cars}" class="btn btn-primary w-100">Afficher la liste</a>
-    </form>
-
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js"></script>
 </body>
 </html>
