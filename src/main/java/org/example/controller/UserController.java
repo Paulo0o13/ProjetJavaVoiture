@@ -43,6 +43,10 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute User user) {
+        if (userRepository.existsById(user.getPseudo())) {
+            return "redirect:/register?exists";
+        }
+
         userRepository.save(user);
         return "redirect:/login";
     }

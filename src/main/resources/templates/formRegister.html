@@ -87,6 +87,10 @@
         </div>
     </div>
 
+    <div th:if="${param.exists}" class="alert alert-warning">
+        Ce pseudo est déjà utilisé. Veuillez en choisir un autre.
+    </div>
+
     <div class="text-center mt-3" style="color: rgba(255,255,255,0.9);">
         Déjà un compte ? <a th:href="@{/login}" style="color: white; font-weight: bold; text-decoration: underline;">Se connecter</a>
     </div>
