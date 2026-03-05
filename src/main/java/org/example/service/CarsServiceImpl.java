@@ -10,7 +10,6 @@ public class CarsServiceImpl implements CarService {
 
     private final CarRepository carRepository;
 
-    // Injection par constructeur
     public CarsServiceImpl(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
