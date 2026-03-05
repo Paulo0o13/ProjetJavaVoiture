@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CarsServiceImpl implements CarService {
+public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
 
-    public CarsServiceImpl(CarRepository carRepository) {
+    public CarServiceImpl(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
 
