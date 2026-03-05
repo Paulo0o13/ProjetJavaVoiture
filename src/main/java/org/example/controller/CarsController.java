@@ -15,7 +15,7 @@ import java.util.List;
 public class CarsController {
 
     private final CarService carService;
-    private final CarRepository carRepository; // Pour la requête filtrée
+    private final CarRepository carRepository;
 
     public CarsController(CarService carService, CarRepository carRepository) {
         this.carService = carService;
@@ -35,7 +35,7 @@ public class CarsController {
         User user = (User) session.getAttribute("loggedUser");
         if (user == null) return "redirect:/login";
 
-        car.setOwner(user); // On lie la voiture à l'utilisateur connecté
+        car.setOwner(user);
         this.carService.saveCar(car);
         return "redirect:/cars";
     }
@@ -44,8 +44,6 @@ public class CarsController {
     public String findAllCars(Model model, HttpSession session) {
         User user = (User) session.getAttribute("loggedUser");
         if (user == null) return "redirect:/login";
-
-        // IMPORTANT : On ne récupère que les voitures du pseudo connecté
         List<Car> cars = this.carRepository.findByOwnerPseudo(user.getPseudo());
         model.addAttribute("cars", cars);
         return "listCar";
