@@ -1,10 +1,9 @@
 package org.example.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.example.model.Car;
-import org.example.model.User;
 import org.example.repository.CarRepository;
 import org.example.service.CarService;
+import org.example.session.UserSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +15,17 @@ public class CarsController {
 
     private final CarService carService;
     private final CarRepository carRepository;
+    private final UserSession userSession;
 
-    public CarsController(CarService carService, CarRepository carRepository) {
+    public CarsController(CarService carService, CarRepository carRepository, UserSession userSession) {
         this.carService = carService;
         this.carRepository = carRepository;
+        this.userSession = userSession;
     }
 
     @GetMapping("/car")
-    public String showForm(Model model, HttpSession session) {
-        if (session.getAttribute("loggedUser") == null){
+    public String showForm(Model model) {
+        if (!userSession.isLoggedIn()){
             return "redirect:/login";
         }
 
@@ -33,24 +34,22 @@ public class CarsController {
     }
 
     @PostMapping("/car")
-    public String addOneCar(@ModelAttribute("car") Car car, HttpSession session) {
-        User user = (User) session.getAttribute("loggedUser");
-        if (user == null) {
+    public String addOneCar(@ModelAttribute("car") Car car) {
+        if (!userSession.isLoggedIn()) {
             return "redirect:/login";
         }
 
-        car.setOwner(user);
+        car.setOwner(userSession.getUser());
         this.carService.saveCar(car);
         return "redirect:/cars";
     }
 
     @GetMapping("/cars")
-    public String findAllCars(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("loggedUser");
-        if (user == null) {
+    public String findAllCars(Model model) {
+        if (!userSession.isLoggedIn()) {
             return "redirect:/login";
         }
-        List<Car> cars = this.carRepository.findByOwnerPseudo(user.getPseudo());
+        List<Car> cars = this.carRepository.findByOwnerPseudo(userSession.getUser().getPseudo());
         model.addAttribute("cars", cars);
         return "listCar";
     }

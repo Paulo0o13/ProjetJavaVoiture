@@ -1,22 +1,23 @@
 package org.example.controller;
 
-import jakarta.servlet.http.HttpSession;
-import org.example.model.Car;
+
 import org.example.model.User;
 import org.example.repository.UserRepository;
+import org.example.session.UserSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Book;
 
 @Controller
 public class UserController {
 
     private final UserRepository userRepository;
+    private final UserSession userSession;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, UserSession userSession) {
         this.userRepository = userRepository;
+        this.userSession = userSession;
     }
 
     @GetMapping("/login")
@@ -25,13 +26,17 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String pseudo, @RequestParam String password, HttpSession session) {
+    public String login(@RequestParam String pseudo, @RequestParam String password) {
         User user = userRepository.findById(pseudo).orElse(null);
 
+
         if (user != null && user.getPassword().equals(password)) {
-            session.setAttribute("loggedUser", user);
+            userSession.setUser(user);
+            System.out.println("Connexion réussie pour : " + userSession.getUser().getPseudo());
+
             return "redirect:/cars";
         }
+
         return "redirect:/login?error";
     }
 
@@ -52,8 +57,8 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
+    public String logout() {
+        userSession.setUser(null);
         return "redirect:/login";
     }
 }
