@@ -11,17 +11,22 @@ import java.util.Map;
 
 @Component
 public class TransactionListener {
+    private static final Logger log = LoggerFactory.getLogger(TransactionListener.class);
 
+    // Étape 4 : On écoute la file de RÉPONSE (credit.response.queue) [cite: 68]
+    @RabbitListener(queues = RabbitConfiguration.RESPONSE_QUEUE)
+    public void onBankResponse(Map<String, Object> response) {
 
-    private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
+        // Extraction des données provenant du service Bank [cite: 35, 36, 37]
+        String userId = (String) response.get("userId");
+        boolean approved = (boolean) response.get("approved");
 
-    @RabbitListener(queues = RabbitConfiguration.LISTENER_QUEUE)
-    public void onMsgReceive(Map<String, Object> payload) {
-        String msg = (String) payload.get("msg");
-
-        log.info("[LISTENER] Received message {}", msg);
-
+        if (approved) {
+            log.info("Félicitations {} ! La banque a approuvé l'opération.", userId);
+            // Ici, tu appelleras ton carService pour valider l'achat [cite: 52]
+        } else {
+            log.warn("Dommage {}... La banque a refusé l'opération.", userId);
+            // Ici, tu pourras gérer l'annulation [cite: 53]
+        }
     }
-
-
 }

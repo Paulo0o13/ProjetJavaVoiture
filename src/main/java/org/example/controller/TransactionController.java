@@ -23,14 +23,23 @@ public class TransactionController {
      * http://localhost:15672
      *
      * */
-    @PostMapping("/sendMessage")
-    public ResponseEntity<?> setName(@RequestParam("message") String message) {
+    @PostMapping("/buy-vehicle") // Remplace ton /sendMessage
+    public ResponseEntity<?> buyVehicle(@RequestParam("carId") Long carId,
+                                        @RequestParam("price") double price,
+                                        @RequestParam("type") String type) {
 
-        rabbitTemplate.convertAndSend(
-                RabbitConfiguration.LISTENER_QUEUE,
-                Map.of("msg", message)
+        // On prépare la requête selon le Step 2 du PDF [cite: 31]
+        Map<String, Object> request = Map.of(
+                "userId", "PseudoDeLutlisateur", // Récupère ton utilisateur connecté
+                "amount", price,                 // Le prix du véhicule
+                "operationType", type,           // "rent" ou "buy"
+                "carId", carId                   // Pour s'en souvenir au retour
         );
-        return ResponseEntity.ok(Map.of("sent", true));
+
+        // On envoie vers la file de REQUÊTE [cite: 67]
+        rabbitTemplate.convertAndSend(RabbitConfiguration.REQUEST_QUEUE, request);
+
+        return ResponseEntity.ok(Map.of("status", "Verification en cours..."));
     }
 
 

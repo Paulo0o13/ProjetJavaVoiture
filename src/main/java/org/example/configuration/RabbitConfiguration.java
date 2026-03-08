@@ -7,12 +7,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfiguration {
 
-    public static final String LISTENER_QUEUE = "listener.queue";
+    // Noms des files imposés par la consigne
+    public static final String REQUEST_QUEUE = "credit.request.queue";
+    public static final String RESPONSE_QUEUE = "credit.response.queue";
 
     @Bean
-    public Queue listenerQueue() {
-        return new Queue(LISTENER_QUEUE, false);
+    public Queue requestQueue() {
+        return new Queue(REQUEST_QUEUE, false);
     }
 
-
+    @Bean
+    public Queue responseQueue() {
+        return new Queue(RESPONSE_QUEUE, false);
+    }
 }

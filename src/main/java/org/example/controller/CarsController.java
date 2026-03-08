@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.configuration.RabbitConfiguration;
 import org.example.model.Car;
 import org.example.repository.CarRepository;
 import org.example.service.CarService;
@@ -8,9 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.example.model.User;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class CarsController {
@@ -18,11 +22,13 @@ public class CarsController {
     private final CarService carService;
     private final CarRepository carRepository;
     private final UserSession userSession;
+    private final RabbitTemplate rabbitTemplate;
 
-    public CarsController(CarService carService, CarRepository carRepository, UserSession userSession) {
+    public CarsController(CarService carService, CarRepository carRepository, UserSession userSession, RabbitTemplate rabbitTemplate) {
         this.carService = carService;
         this.carRepository = carRepository;
         this.userSession = userSession;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
 
@@ -77,7 +83,7 @@ public class CarsController {
         return "catalogue";
     }
 
-    @GetMapping("/buy/{id}")
+    /*@GetMapping("/buy/{id}")
     public String buyCar(@PathVariable Long id) {
         if (!userSession.isLoggedIn()) {
             return "redirect:/login";
@@ -85,6 +91,31 @@ public class CarsController {
         User buyer = userSession.getUser();
         carService.acquerirVoiture(id, buyer);
         return "redirect:/cars";
+    }*/
+
+    @GetMapping("/buy/{id}")
+    public String buyCar(@PathVariable Long id) {
+        if (!userSession.isLoggedIn()) {
+            return "redirect:/login";
+        }
+
+        // 1. Récupérer les infos du véhicule et de l'acheteur
+        Car car = carRepository.findById(id).orElseThrow();
+        User buyer = userSession.getUser();
+
+        // 2. Préparer la requête pour la banque (Step 2 du PDF) [cite: 31]
+        Map<String, Object> creditRequest = new HashMap<>();
+        creditRequest.put("userId", buyer.getPseudo());    // Identifiant [cite: 32]
+        creditRequest.put("amount", car.getPrix());        // Montant [cite: 33]
+        creditRequest.put("operationType", car.getTypeOffre()); // Type [cite: 34]
+        creditRequest.put("carId", id); // Indispensable pour la réponse plus tard
+
+        // 3. Envoyer le message vers la file de requête [cite: 47, 67]
+        rabbitTemplate.convertAndSend(RabbitConfiguration.REQUEST_QUEUE, creditRequest);
+
+        // 4. Rediriger vers une page d'attente ou le catalogue
+        // L'utilisateur ne verra pas sa voiture tout de suite, il faut que la banque réponde !
+        return "redirect:/catalogue?pending=true";
     }
 
     @GetMapping("/catalogue/data")
