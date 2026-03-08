@@ -32,8 +32,6 @@ public class UserController {
 
         if (user != null && user.getPassword().equals(password)) {
             userSession.setUser(user);
-            System.out.println("Connexion réussie pour : " + userSession.getUser().getPseudo());
-
             return "redirect:/cars";
         }
 

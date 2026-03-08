@@ -10,7 +10,7 @@
         <div class="navbar-nav flex-row order-md-last">
             <div class="nav-item d-none d-md-flex me-3">
                     <span class="nav-link px-0 text-white">
-                        Bienvenue, <strong th:text="${session.loggedUser != null ? session.loggedUser.pseudo : 'Utilisateur'}" class="ms-1">Utilisateur</strong>
+                        Bienvenue, <strong th:text="${loggedUser != null ? loggedUser.pseudo : 'Utilisateur'}" class="ms-1">Utilisateur</strong>
                     </span>
             </div>
             <div class="nav-item">

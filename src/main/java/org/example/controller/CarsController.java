@@ -29,6 +29,7 @@ public class CarsController {
             return "redirect:/login";
         }
 
+        model.addAttribute("loggedUser", userSession.getUser());
         model.addAttribute("car", new Car());
         return "formCar";
     }
@@ -49,6 +50,7 @@ public class CarsController {
         if (!userSession.isLoggedIn()) {
             return "redirect:/login";
         }
+        model.addAttribute("loggedUser", userSession.getUser());
         List<Car> cars = this.carRepository.findByOwnerPseudo(userSession.getUser().getPseudo());
         model.addAttribute("cars", cars);
         return "listCar";
