@@ -2,6 +2,9 @@ package org.example.listener;
 
 import org.example.configuration.RabbitConfiguration;
 import org.example.controller.TransactionController;
+import org.example.model.User;
+import org.example.repository.UserRepository;
+import org.example.service.CarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -13,20 +16,29 @@ import java.util.Map;
 public class TransactionListener {
     private static final Logger log = LoggerFactory.getLogger(TransactionListener.class);
 
-    // Étape 4 : On écoute la file de RÉPONSE (credit.response.queue) [cite: 68]
+    private final CarService carService;
+    private final UserRepository userRepository;
+
+    // 2. Injecte-le via le constructeur
+    public TransactionListener(CarService carService, UserRepository userRepository) {
+        this.carService = carService;
+        this.userRepository = userRepository;
+    }
+
     @RabbitListener(queues = RabbitConfiguration.RESPONSE_QUEUE)
     public void onBankResponse(Map<String, Object> response) {
-
-        // Extraction des données provenant du service Bank [cite: 35, 36, 37]
-        String userId = (String) response.get("userId");
         boolean approved = (boolean) response.get("approved");
+        String pseudo = (String) response.get("userId");
+        Long carId = ((Number) response.get("carId")).longValue();
 
         if (approved) {
-            log.info("Félicitations {} ! La banque a approuvé l'opération.", userId);
-            // Ici, tu appelleras ton carService pour valider l'achat [cite: 52]
-        } else {
-            log.warn("Dommage {}... La banque a refusé l'opération.", userId);
-            // Ici, tu pourras gérer l'annulation [cite: 53]
+            // On utilise findById car ton "ID" est le pseudo (String)
+            User buyer = userRepository.findById(pseudo).orElse(null);
+
+            if (buyer != null) {
+                carService.acquerirVoiture(carId, buyer);
+                System.out.println("Succès : Propriétaire mis à jour.");
+            }
         }
     }
 }
