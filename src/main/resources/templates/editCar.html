@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier le véhicule</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
+    <link rel="stylesheet" th:href="@{/bg.css}" />
+</head>
+<body class="d-flex flex-column" style="min-height: 100vh;">
+
+<div class="page">
+    <div th:replace="~{navbar :: maNavbar}"></div>
+
+    <div class="page-wrapper">
+        <div class="container-tight py-4">
+            <div class="text-center mb-4">
+                <h2 class="text-white">Modifier l'annonce</h2>
+                <p class="text-muted">Mettez à jour les informations du véhicule.</p>
+            </div>
+
+            <div class="card glass-card shadow-lg">
+                <div class="card-body">
+                    <form th:action="@{/admin/save-edit}" th:object="${car}" method="post">
+
+                        <input type="hidden" th:field="*{id}" />
+
+                        <div class="mb-3">
+                            <label class="form-label text-white">Marque</label>
+                            <input type="text" class="form-control" th:field="*{marque}" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-white">Modèle</label>
+                            <input type="text" class="form-control" th:field="*{modele}" required />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label text-white">Année</label>
+                                <input type="number" class="form-control" th:field="*{annee}" required />
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label text-white">Couleur</label>
+                                <input type="text" class="form-control" th:field="*{couleur}" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-white">Prix (€)</label>
+                            <input type="number" class="form-control" th:field="*{prix}" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-white">Type d'offre</label>
+                            <select class="form-select" th:field="*{typeOffre}">
+                                <option value="ACHAT">Achat</option>
+                                <option value="LOCATION">Location</option>
+                            </select>
+                        </div>
+
+                        <div class="form-footer d-flex gap-2">
+                            <a th:href="@{/catalogue}" class="btn btn-outline-light w-100">Annuler</a>
+                            <button type="submit" class="btn btn-primary w-100">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js"></script>
+</body>
+</html>

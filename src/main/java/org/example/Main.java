@@ -1,14 +1,35 @@
 package org.example;
 
-import org.example.model.Car;
-import org.example.repository.CarRepository;
+import org.example.model.User;
+import org.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.List;
 
 @SpringBootApplication
-public class Main {
-public static void main(String[] args) { SpringApplication.run(Main.class, args); }}
+public class Main implements CommandLineRunner {
+public static void main(String[] args) { SpringApplication.run(Main.class, args); }
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    public void run(String... args) throws Exception {
+
+        if (!userRepository.existsById("admin")) {
+            User admin = new User();
+            admin.setPseudo("admin");
+            admin.setPassword("admin123");
+            admin.setRole("ADMIN");
+
+            userRepository.save(admin);
+        }
+
+    }
+
+
+
+
+}

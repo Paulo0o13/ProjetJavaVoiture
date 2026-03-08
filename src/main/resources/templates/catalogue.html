@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Catalogue des voitures</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
+    <link rel="stylesheet" th:href="@{/bg.css}" />
+</head>
+<body class="d-flex flex-column" style="min-height: 100vh;">
+
+<div class="page">
+    <div th:replace="~{navbar :: maNavbar}"></div>
+
+    <div class="page-wrapper">
+        <div class="container-xl py-4">
+            <div class="page-header mb-4">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="page-title text-white">Catalogue</h2>
+                        <div class="text-muted mt-1">Découvrez nos véhicules disponibles immédiatement.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="car-list" class="row row-cards">
+                <div class="col-sm-6 col-lg-4" th:each="c : ${cars}">
+                    <div class="card card-sm glass-card shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div>
+                                    <div class="fw-bold text-white" style="font-size: 1.2rem;" th:text="${c.marque + ' ' + c.modele}">Marque Modèle</div>
+                                    <div class="text-muted" th:text="${c.annee + ' - ' + c.couleur}">2022 - Noir</div>
+                                </div>
+                                <div class="ms-auto">
+                                    <span class="badge bg-blue-lt" th:text="${c.typeOffre}">ACHAT</span>
+                                </div>
+                            </div>
+                            <div class="h1 mb-3 text-white" th:text="${c.prix + ' €'}">15 000 €</div>
+
+                            <div class="d-grid gap-2">
+                                <div th:if="${loggedUser != null && loggedUser.role != 'ADMIN'}" class="d-grid">
+                                    <a th:href="@{/buy/{id}(id=${c.id})}" class="btn btn-custom">
+                                        <span th:text="${c.typeOffre == 'LOCATION' ? 'Louer maintenant' : 'Acheter'}">Action</span>
+                                    </a>
+                                </div>
+
+                                <div th:if="${loggedUser != null && loggedUser.role == 'ADMIN'}" class="row g-2">
+                                    <div class="col-6">
+                                        <a th:href="@{/admin/edit-car/{id}(id=${c.id})}" class="btn btn-outline-primary w-100">
+                                            Modifier
+                                        </a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a th:href="@{/admin/delete/{id}(id=${c.id})}" class="btn btn-outline-danger w-100">
+                                            Supprimer
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <a th:if="${loggedUser == null}" th:href="@{/login}" class="btn btn-outline-light">Connectez-vous pour commander</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${#lists.isEmpty(cars)}" class="text-center py-5">
+                    <h3 class="text-white">Le catalogue est actuellement vide.</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js"></script>
+<script>
+    function refreshCatalogue() {
+        fetch('/catalogue/data')
+            .then(response => {
+                // Si le serveur répond par une erreur (ex: session expirée)
+                if (!response.ok) throw new Error('Session expirée ou erreur serveur');
+                return response.text();
+            })
+            .then(html => {
+                const carList = document.getElementById('car-list');
+                if (carList) {
+                    carList.innerHTML = html;
+                }
+            })
+            .catch(err => {
+                // On log l'erreur seulement une fois pour ne pas spammer
+                console.debug("Le catalogue ne peut pas être mis à jour :", err.message);
+            });
+    }
+
+    // Rafraîchissement toutes les 2 secondes
+    const intervalId = setInterval(refreshCatalogue, 2000);
+
+    // Optionnel : Arrêter le script si l'utilisateur quitte la page
+    window.onbeforeunload = function() {
+        clearInterval(intervalId);
+    };
+</script>
+</body>
+</html>

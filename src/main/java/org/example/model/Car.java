@@ -19,6 +19,11 @@ public class Car {
     public String couleur;
     public int annee;
 
+    private Double prix;
+    private String typeOffre;
+    private boolean disponible = true;
+
+
     @ManyToOne
     @JoinColumn(name = "user_pseudo")
     private User owner;

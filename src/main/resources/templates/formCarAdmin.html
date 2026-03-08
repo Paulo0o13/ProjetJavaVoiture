@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Administration - Ajouter au Catalogue</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
+    <link rel="stylesheet" th:href="@{/bg.css}" />
+</head>
+<body class="d-flex flex-column" style="min-height: 100vh;">
+
+<div class="page">
+    <div th:replace="~{navbar :: maNavbar}"></div>
+
+    <div class="page-wrapper">
+        <div class="container p-4 mt-4" style="max-width: 600px; margin: 0 auto;">
+
+            <div class="card shadow-lg border-0 glass-card">
+                <div class="card-header pt-4 pb-3 border-bottom-0">
+                    <h2 class="mb-0 text-center w-100">Ajouter au Catalogue (Admin)</h2>
+                </div>
+
+                <div class="card-body p-4">
+                    <form th:action="@{/admin/add-car}" th:object="${car}" method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Marque :</label>
+                            <input class="form-control glass-input" type="text" th:field="*{marque}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Modèle :</label>
+                            <input class="form-control glass-input" type="text" th:field="*{modele}" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Couleur :</label>
+                                <input class="form-control glass-input" type="text" th:field="*{couleur}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Année :</label>
+                                <input class="form-control glass-input" type="number" th:field="*{annee}" required>
+                            </div>
+                        </div>
+
+                        <hr style="border-top: 1px solid rgba(255,255,255,0.2);">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Prix (€) :</label>
+                            <input class="form-control glass-input" type="number" step="0.01" th:field="*{prix}" placeholder="Ex: 15000" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Type de contrat :</label>
+                            <select class="form-select glass-input" th:field="*{typeOffre}" required>
+                                <option value="ACHAT">Vente</option>
+                                <option value="LOCATION">Location / jour</option>
+                            </select>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-custom">Publier dans le catalogue</button>
+                            <a th:href="@{/catalogue}" class="btn btn-outline-custom">Annuler</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js"></script>
+</body>
+</html>

@@ -2,34 +2,22 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Mes voitures - Liste</title>
+    <title>Mes voitures - Mon Garage</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
     <link rel="stylesheet" th:href="@{/bg.css}" />
     <style>
-        .glass-card .table {
-            color: white !important;
-            margin-bottom: 0;
-        }
-
+        .glass-card .table { color: white !important; margin-bottom: 0; }
         .glass-card .table thead th {
             color: rgba(255, 255, 255, 0.9) !important;
             background: rgba(0, 0, 0, 0.2) !important;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
         }
-
         .glass-card .table tbody td {
             background: transparent !important;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
             color: white !important;
         }
-
-        .glass-card .table-striped tbody tr:nth-of-type(odd) td {
-            background: rgba(255, 255, 255, 0.05) !important;
-        }
-
-        .empty-title {
-            color: white !important;
-        }
+        .empty-title { color: white !important; }
     </style>
 </head>
 <body class="d-flex flex-column" style="min-height: 100vh;">
@@ -39,19 +27,11 @@
 
     <div class="page-wrapper">
         <div class="container-xl py-4">
-            <div class="page-header d-print-none mb-4">
+            <div class="page-header mb-4">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h2 class="page-title">Mes Voitures</h2>
-                        <div class="text-muted mt-1">Gérez votre collection personnelle.</div>
-                    </div>
-                    <div class="col-auto ms-auto d-print-none">
-                        <div class="btn-list">
-                            <a th:href="@{/car}" class="btn btn-custom d-none d-sm-inline-block">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
-                                Ajouter une voiture
-                            </a>
-                        </div>
+                        <h2 class="page-title text-white">Mon Garage</h2>
+                        <div class="text-muted mt-1">Voici les véhicules que vous possédez ou louez.</div>
                     </div>
                 </div>
             </div>
@@ -61,38 +41,46 @@
                     <table class="table table-vcenter card-table">
                         <thead>
                         <tr>
-                            <th>Marque</th>
-                            <th>Modèle</th>
-                            <th>Couleur</th>
+                            <th>Marque & Modèle</th>
                             <th>Année</th>
+                            <th>Couleur</th>
+                            <th>Type</th>
+                            <th>Prix réglé</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="c : ${cars}">
-                            <td th:text="${c.marque}" class="fw-bold">Marque</td>
-                            <td th:text="${c.modele}" class="text-secondary">Modèle</td>
-                            <td th:text="${c.couleur}">Couleur</td>
+                            <td>
+                                <div th:text="${c.marque}" class="fw-bold">Marque</div>
+                                <div th:text="${c.modele}" class="text-muted small">Modèle</div>
+                            </td>
                             <td th:text="${c.annee}">2000</td>
+                            <td th:text="${c.couleur}">Couleur</td>
+                            <td>
+                                <span class="badge bg-azure-lt" th:text="${c.typeOffre}">Type</span>
+                            </td>
+                            <td th:text="${c.prix + ' €'}" class="fw-bold">0 €</td>
+                            <td class="text-end">
+                                <form th:action="@{/cars/release/{id}(id=${c.id})}" method="post" onsubmit="return confirm('Confirmer cette action ?');">
+                                    <button type="submit"
+                                            th:class="${c.typeOffre == 'LOCATION' ? 'btn btn-outline-info btn-sm' : 'btn btn-outline-danger btn-sm'}">
+                                        <span th:text="${c.typeOffre == 'LOCATION' ? 'Rendre la location' : 'Supprimer mon achat'}">Action</span>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div th:if="${#lists.isEmpty(cars)}" class="empty py-5">
-                    <div class="empty-icon text-muted">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <circle cx="10" cy="10" r="7" />
-                            <line x1="21" y1="21" x2="15" y2="15" />
-                        </svg>
-                    </div>
-                    <p class="empty-title">Aucune voiture trouvée</p>
+                <div th:if="${#lists.isEmpty(cars)}" class="empty py-5 text-center">
+                    <p class="empty-title">Votre garage est vide</p>
                     <p class="empty-subtitle text-muted">
-                        Vous n'avez pas encore enregistré de véhicule dans votre garage.
+                        Allez faire un tour sur le catalogue pour louer ou acheter votre première voiture !
                     </p>
                     <div class="empty-action">
-                        <a th:href="@{/car}" class="btn btn-custom">
-                            Enregistrer ma première voiture
+                        <a th:href="@{/catalogue}" class="btn btn-custom">
+                            Voir le catalogue
                         </a>
                     </div>
                 </div>

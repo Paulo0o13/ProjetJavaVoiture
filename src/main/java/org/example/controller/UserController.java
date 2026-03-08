@@ -20,6 +20,7 @@ public class UserController {
         this.userSession = userSession;
     }
 
+
     @GetMapping("/login")
     public String showLogin() {
         return "formLog";
@@ -29,10 +30,15 @@ public class UserController {
     public String login(@RequestParam String pseudo, @RequestParam String password) {
         User user = userRepository.findById(pseudo).orElse(null);
 
-
         if (user != null && user.getPassword().equals(password)) {
             userSession.setUser(user);
-            return "redirect:/cars";
+
+            if("ADMIN".equals(user.getRole())) {
+                return "redirect:/catalogue";
+            }else{
+                return "redirect:/cars";
+            }
+
         }
 
         return "redirect:/login?error";
@@ -50,6 +56,7 @@ public class UserController {
             return "redirect:/register?exists";
         }
 
+        user.setRole("USER");
         userRepository.save(user);
         return "redirect:/login";
     }
