@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Connexion</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
-    <link rel="stylesheet" th:href="@{/bg.css}" />
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/bg.css}"/>
 </head>
 
 <body class="d-flex flex-column" style="min-height: 100vh; justify-content: center;">
@@ -18,28 +18,31 @@
         <div class="card-body">
             <h2 class="card-title text-center mb-4">Connectez-vous à votre compte</h2>
 
-            <div th:if="${param.error}" class="alert alert-danger">
+            <div class="alert alert-danger" th:if="${param.error}">
                 Pseudo ou mot de passe incorrect.
             </div>
 
-            <form th:action="@{/login}" method="post" autocomplete="off">
+            <form autocomplete="off" method="post" th:action="@{/login}">
                 <div class="mb-3">
                     <label class="form-label">Nom d'utilisateur (Pseudo)</label>
-                    <input type="text" name="pseudo" class="form-control glass-input" placeholder="Entrez votre pseudo" required>
+                    <input class="form-control glass-input" name="pseudo" placeholder="Entrez votre pseudo" required
+                           type="text">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Mot de passe</label>
-                    <input type="password" name="password" class="form-control glass-input" placeholder="Mot de passe" required>
+                    <input class="form-control glass-input" name="password" placeholder="Mot de passe" required
+                           type="password">
                 </div>
                 <div class="form-footer">
-                    <button type="submit" class="btn btn-custom w-100">Se connecter</button>
+                    <button class="btn btn-custom w-100" type="submit">Se connecter</button>
                 </div>
             </form>
         </div>
     </div>
 
     <div class="text-center mt-3" style="color: rgba(255,255,255,0.9);">
-        Pas encore de compte ? <a th:href="@{/register}" tabindex="-1" style="color: white; font-weight: bold; text-decoration: underline;">S'inscrire</a>
+        Pas encore de compte ? <a style="color: white; font-weight: bold; text-decoration: underline;" tabindex="-1"
+                                  th:href="@{/register}">S'inscrire</a>
     </div>
 </div>
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Inscription - Garage</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" rel="stylesheet"/>
 
     <style>
         body {
@@ -27,7 +27,7 @@
         .glass-card .card-title,
         .glass-card .form-label {
             color: #ffffff !important;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
 
@@ -54,6 +54,7 @@
             color: white !important;
             font-weight: bold;
         }
+
         .btn-custom:hover {
             background-color: #2a444a !important;
         }
@@ -71,28 +72,31 @@
         <div class="card-body">
             <h2 class="card-title text-center mb-4">Créer un nouveau compte</h2>
 
-            <form th:action="@{/register}" th:object="${user}" method="post">
+            <form method="post" th:action="@{/register}" th:object="${user}">
                 <div class="mb-3">
                     <label class="form-label">Pseudo choisi</label>
-                    <input type="text" th:field="*{pseudo}" class="form-control glass-input" placeholder="Ex: JeanDupont" required>
+                    <input class="form-control glass-input" placeholder="Ex: JeanDupont" required
+                           th:field="*{pseudo}" type="text">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Mot de passe</label>
-                    <input type="password" th:field="*{password}" class="form-control glass-input" placeholder="Créez un mot de passe" required>
+                    <input class="form-control glass-input" placeholder="Créez un mot de passe" required
+                           th:field="*{password}" type="password">
                 </div>
                 <div class="form-footer">
-                    <button type="submit" class="btn btn-custom w-100">Créer mon compte</button>
+                    <button class="btn btn-custom w-100" type="submit">Créer mon compte</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div th:if="${param.exists}" class="alert alert-warning">
+    <div class="alert alert-warning" th:if="${param.exists}">
         Ce pseudo est déjà utilisé. Veuillez en choisir un autre.
     </div>
 
     <div class="text-center mt-3" style="color: rgba(255,255,255,0.9);">
-        Déjà un compte ? <a th:href="@{/login}" style="color: white; font-weight: bold; text-decoration: underline;">Se connecter</a>
+        Déjà un compte ? <a style="color: white; font-weight: bold; text-decoration: underline;" th:href="@{/login}">Se
+        connecter</a>
     </div>
 </div>
 
