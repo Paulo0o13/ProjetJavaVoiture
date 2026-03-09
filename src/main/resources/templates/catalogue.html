@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Catalogue des voitures</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
-    <link rel="stylesheet" th:href="@{/bg.css}" />
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/bg.css}"/>
 </head>
 <body class="d-flex flex-column" style="min-height: 100vh;">
 
@@ -22,51 +22,57 @@
                 </div>
             </div>
 
-            <div id="car-list" class="row row-cards">
+            <div class="row row-cards" id="car-list">
                 <div class="col-sm-6 col-lg-4" th:each="c : ${cars}">
                     <div class="card card-sm glass-card shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-3">
                                 <div>
-                                    <div class="fw-bold text-white" style="font-size: 1.2rem;" th:text="${c.marque + ' ' + c.modele}">Marque Modèle</div>
+                                    <div class="fw-bold text-white" style="font-size: 1.2rem;"
+                                         th:text="${c.marque + ' ' + c.modele}">Marque Modèle
+                                    </div>
                                     <div class="text-muted" th:text="${c.annee + ' - ' + c.couleur}">2022 - Noir</div>
                                 </div>
                                 <div class="ms-auto">
-                                    <span class="badge bg-blue-lt" th:text="${c.typeOffre}">ACHAT</span>
+                                    <span class="badge bg-blue-lt" th:text="${c.typeOffre?.name()}">ACHAT</span>
                                 </div>
                             </div>
                             <div class="h1 mb-3 text-white" th:text="${c.prix + ' €'}">15 000 €</div>
 
                             <div class="d-grid gap-2">
-                                <div th:if="${loggedUser != null && loggedUser.role != 'ADMIN'}" class="d-grid">
+                                <div class="d-grid" th:if="${loggedUser != null && loggedUser.role?.name() != 'ADMIN'}">
                                     <button class="btn btn-custom"
-                                            data-bs-toggle="modal"
                                             data-bs-target="#modal-paiement"
+                                            data-bs-toggle="modal"
                                             th:attr="data-car-id=${c.id}">
-                                        <span th:text="${c.typeOffre == 'LOCATION' ? 'Louer maintenant' : 'Acheter'}">Action</span>
+                                        <span th:text="${c.typeOffre?.name() == 'LOCATION' ? 'Louer maintenant' : 'Acheter'}">Action</span>
                                     </button>
                                 </div>
 
-                                <div th:if="${loggedUser != null && loggedUser.role == 'ADMIN'}" class="row g-2">
+                                <div class="row g-2"
+                                     th:if="${loggedUser != null && loggedUser.role?.name() == 'ADMIN'}">
                                     <div class="col-6">
-                                        <a th:href="@{/admin/edit-car/{id}(id=${c.id})}" class="btn btn-outline-primary w-100">
+                                        <a class="btn btn-outline-primary w-100"
+                                           th:href="@{/admin/edit-car/{id}(id=${c.id})}">
                                             Modifier
                                         </a>
                                     </div>
                                     <div class="col-6">
-                                        <a th:href="@{/admin/delete/{id}(id=${c.id})}" class="btn btn-outline-danger w-100">
+                                        <a class="btn btn-outline-danger w-100"
+                                           th:href="@{/admin/delete/{id}(id=${c.id})}">
                                             Supprimer
                                         </a>
                                     </div>
                                 </div>
 
-                                <a th:if="${loggedUser == null}" th:href="@{/login}" class="btn btn-outline-light">Connectez-vous pour commander</a>
+                                <a class="btn btn-outline-light" th:href="@{/login}" th:if="${loggedUser == null}">Connectez-vous
+                                    pour commander</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div th:if="${#lists.isEmpty(cars)}" class="text-center py-5">
+                <div class="text-center py-5" th:if="${#lists.isEmpty(cars)}">
                     <h3 class="text-white">Le catalogue est actuellement vide.</h3>
                 </div>
             </div>
@@ -74,15 +80,18 @@
     </div>
 </div>
 
-<div class="modal modal-blur fade" id="modal-paiement" tabindex="-1" role="dialog" aria-hidden="true">
+<div aria-hidden="true" class="modal modal-blur fade" id="modal-paiement" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content shadow-lg" style="background-color: rgba(20, 25, 35, 0.95); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden;">
+        <div class="modal-content shadow-lg"
+             style="background-color: rgba(20, 25, 35, 0.95); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden;">
 
-            <form id="form-paiement" method="get" action="">
+            <form action="" id="form-paiement" method="get">
 
-                <div class="modal-header" style="background-color: transparent; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <div class="modal-header"
+                     style="background-color: transparent; border-bottom: 1px solid rgba(255,255,255,0.1);">
                     <h5 class="modal-title text-white">Informations de paiement</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    <button aria-label="Fermer" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            type="button"></button>
                 </div>
 
                 <div class="modal-body" style="background-color: transparent;">
@@ -92,39 +101,37 @@
                             border: 1px solid rgba(255, 255, 255, 0.2) !important;
                             color: white !important;
                         }
+
                         #modal-paiement .form-control::placeholder {
                             color: rgba(255, 255, 255, 0.4) !important;
                         }
+
                         #modal-paiement .form-control:focus {
                             background-color: rgba(0, 0, 0, 0.4) !important;
                             border-color: #206bc4 !important;
                             box-shadow: 0 0 0 0.25rem rgba(32, 107, 196, 0.25) !important;
                         }
+
                         #modal-paiement .modal-footer {
                             background-color: transparent !important;
                         }
                     </style>
 
-                    <div class="row mb-3">
-                        <div class="col-6">
-                            <label class="form-label text-white">Prénom</label>
-                            <input type="text" class="form-control" name="prenom" placeholder="Jean" required>
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label text-white">Nom</label>
-                            <input type="text" class="form-control" name="nom" placeholder="Dupont" required>
-                        </div>
-                    </div>
-
                     <div class="mb-3">
                         <label class="form-label text-white">IBAN</label>
-                        <input type="text" class="form-control" name="iban" placeholder="FR76 0000 0000 0000 0000 0000 000"  title="Veuillez saisir un IBAN valide" required>
+                        <input class="form-control" name="IBAN" placeholder="FR76 0000 0000 0000 0000 0000 000"
+                               required title="Veuillez saisir un IBAN valide"
+                               type="text">
                     </div>
 
-                    <div class="text-muted mt-2 d-flex align-items-center" style="font-size: 0.85rem; color: rgba(255,255,255,0.6) !important;">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lock me-1" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                    <div class="text-muted mt-2 d-flex align-items-center"
+                         style="font-size: 0.85rem; color: rgba(255,255,255,0.6) !important;">
+                        <svg class="icon icon-tabler icon-tabler-lock me-1" fill="none"
+                             height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                             stroke-width="2"
+                             viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none" stroke="none"></path>
+                            <rect height="10" rx="2" width="14" x="5" y="11"></rect>
                             <circle cx="12" cy="16" r="1"></circle>
                             <path d="M8 11v-4a4 4 0 0 1 8 0v4"></path>
                         </svg>
@@ -133,8 +140,8 @@
                 </div>
 
                 <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.1);">
-                    <button type="button" class="btn btn-outline-light me-auto" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Confirmer la transaction</button>
+                    <button class="btn btn-outline-light me-auto" data-bs-dismiss="modal" type="button">Annuler</button>
+                    <button class="btn btn-primary" type="submit">Confirmer la transaction</button>
                 </div>
             </form>
 
@@ -146,7 +153,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js"></script>
 <script>
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const modalPaiement = document.getElementById('modal-paiement');
         if (modalPaiement) {
             modalPaiement.addEventListener('show.bs.modal', function (event) {
@@ -179,7 +186,7 @@
 
     const intervalId = setInterval(refreshCatalogue, 2000);
 
-    window.onbeforeunload = function() {
+    window.onbeforeunload = function () {
         clearInterval(intervalId);
     };
 </script>

@@ -24,13 +24,13 @@ public class AdminController {
         this.carRepository = carRepository;
     }
 
-    private boolean isAdmin() {
-        return this.userSession.isLoggedIn() && this.userSession.getUser().getRole() != null && this.userSession.getUser().getRole().equals(RoleType.ADMIN);
+    private boolean isNotAdmin() {
+        return this.userSession.isLoggedOut() || this.userSession.getUser().getRole() == null || !this.userSession.getUser().getRole().equals(RoleType.ADMIN);
     }
 
     @GetMapping("/add-car")
     public String showAddForm(Model model) {
-        if (this.isAdmin()) {
+        if (this.isNotAdmin()) {
             return "redirect:/login";
         }
 
@@ -42,7 +42,7 @@ public class AdminController {
 
     @PostMapping("/add-car")
     public String addCarToCatalogue(@ModelAttribute Car car) {
-        if (this.isAdmin()) {
+        if (this.isNotAdmin()) {
             return "redirect:/login";
         }
         car.setOwner(null);
@@ -54,7 +54,7 @@ public class AdminController {
 
     @GetMapping("/delete/{id}")
     public String deleteCar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        if (this.isAdmin()) {
+        if (this.isNotAdmin()) {
             return "redirect:/login";
         }
 
@@ -70,7 +70,7 @@ public class AdminController {
 
     @GetMapping("/edit-car/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        if (this.isAdmin()) {
+        if (this.isNotAdmin()) {
             return "redirect:/login";
         }
 
@@ -82,7 +82,7 @@ public class AdminController {
 
     @PostMapping("/save-edit")
     public String saveEdit(@ModelAttribute("car") Car car) {
-        if (this.isAdmin()) {
+        if (this.isNotAdmin()) {
             return "redirect:/login";
         }
 

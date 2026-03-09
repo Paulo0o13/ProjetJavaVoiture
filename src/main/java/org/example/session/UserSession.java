@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class UserSession implements Serializable {
     private User user;
 
-    public boolean isLoggedIn() {
-        return this.user != null;
+    public boolean isLoggedOut() {
+        return this.user == null;
     }
 }

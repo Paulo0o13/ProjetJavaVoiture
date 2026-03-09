@@ -19,15 +19,15 @@ public class TransactionController {
     }
 
     @PostMapping("/buy-vehicle")
-    public ResponseEntity<?> buyVehicle(@RequestParam("carId") Long carId,
+    public ResponseEntity<?> buyVehicle(@RequestParam("iban") String iban,
                                         @RequestParam("price") double price,
                                         @RequestParam("type") String type) {
 
+
         Map<String, Object> request = Map.of(
-                "userId", "PseudoDeLutlisateur",
+                "userId", iban,
                 "amount", price,
-                "operationType", type,
-                "carId", carId
+                "operationType", type
         );
 
         this.rabbitTemplate.convertAndSend(RabbitConfiguration.REQUEST_QUEUE, request);

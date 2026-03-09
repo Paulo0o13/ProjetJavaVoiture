@@ -2,14 +2,17 @@ package org.example.controller;
 
 import org.example.configuration.RabbitConfiguration;
 import org.example.model.Car;
+import org.example.model.User;
 import org.example.repository.CarRepository;
 import org.example.service.CarService;
 import org.example.session.UserSession;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.example.model.User;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,15 +35,9 @@ public class CarsController {
     }
 
 
-
-
-
-
-
-
     @GetMapping("/car")
     public String showForm(Model model) {
-        if (userSession.isLoggedIn()){
+        if (this.userSession.isLoggedOut()) {
             return "redirect:/login";
         }
 
@@ -51,7 +48,7 @@ public class CarsController {
 
     @PostMapping("/car")
     public String addOneCar(@ModelAttribute("car") Car car) {
-        if (userSession.isLoggedIn()) {
+        if (this.userSession.isLoggedOut()) {
             return "redirect:/login";
         }
 
@@ -62,11 +59,11 @@ public class CarsController {
 
     @GetMapping("/cars")
     public String findAllCars(Model model) {
-        if (userSession.isLoggedIn()) {
+        if (this.userSession.isLoggedOut()) {
             return "redirect:/login";
         }
-        model.addAttribute("loggedUser", userSession.getUser());
-        List<Car> cars = this.carRepository.findByOwnerPseudo(userSession.getUser().getPseudo());
+        model.addAttribute("loggedUser", this.userSession.getUser());
+        List<Car> cars = this.carRepository.findByOwnerPseudo(this.userSession.getUser().getPseudo());
         model.addAttribute("cars", cars);
         return "listCar";
     }
@@ -74,60 +71,44 @@ public class CarsController {
 
     @GetMapping("/catalogue")
     public String showCatalogue(Model model) {
-        List<Car> cars = carRepository.findByDisponibleTrue();
+        List<Car> cars = this.carRepository.findByDisponibleTrue();
         model.addAttribute("cars", cars);
-        if (userSession.isLoggedIn()) {
+        if (this.userSession.isLoggedOut()) {
             return "redirect:/login";
         }
         model.addAttribute("loggedUser", userSession.getUser());
         return "catalogue";
     }
 
-    /*@GetMapping("/buy/{id}")
-    public String buyCar(@PathVariable Long id) {
-        if (!userSession.isLoggedIn()) {
-            return "redirect:/login";
-        }
-        User buyer = userSession.getUser();
-        carService.acquerirVoiture(id, buyer);
-        return "redirect:/cars";
-    }*/
 
     @GetMapping("/buy/{id}")
     public String buyCar(@PathVariable Long id) {
-        if (userSession.isLoggedIn()) {
+        if (this.userSession.isLoggedOut()) {
             return "redirect:/login";
         }
 
-        // 1. Récupérer les infos du véhicule et de l'acheteur
-        Car car = carRepository.findById(id).orElseThrow();
-        User buyer = userSession.getUser();
+        Car car = this.carRepository.findById(id).orElseThrow();
+        User buyer = this.userSession.getUser();
 
-        // 2. Préparer la requête pour la banque (Step 2 du PDF) [cite: 31]
         Map<String, Object> creditRequest = new HashMap<>();
         creditRequest.put("userId", buyer.getPseudo());    // Identifiant [cite: 32]
         creditRequest.put("amount", car.getPrix());        // Montant [cite: 33]
         creditRequest.put("operationType", car.getTypeOffre()); // Type [cite: 34]
         creditRequest.put("carId", id); // Indispensable pour la réponse plus tard
 
-        // 3. Envoyer le message vers la file de requête [cite: 47, 67]
-        rabbitTemplate.convertAndSend(RabbitConfiguration.REQUEST_QUEUE, creditRequest);
+        this.rabbitTemplate.convertAndSend(RabbitConfiguration.REQUEST_QUEUE, creditRequest);
 
-        // 4. Rediriger vers une page d'attente ou le catalogue
-        // L'utilisateur ne verra pas sa voiture tout de suite, il faut que la banque réponde !
         return "redirect:/catalogue?pending=true";
     }
 
     @GetMapping("/catalogue/data")
     public String getCatalogueData(Model model) {
-        // Si l'utilisateur n'est pas connecté, on ne lui envoie rien
-        if (userSession.isLoggedIn()) {
-            model.addAttribute("cars", new ArrayList<Car>()); // Liste vide
+        if (this.userSession.isLoggedOut()) {
+            model.addAttribute("cars", new ArrayList<Car>());
             return "catalogue :: #car-list";
         }
 
-        // Sinon, on envoie la liste normale
-        List<Car> cars = carRepository.findByOwnerPseudo(null);
+        List<Car> cars = this.carRepository.findByOwnerPseudo(null);
         model.addAttribute("cars", cars);
         model.addAttribute("loggedUser", userSession.getUser());
 
@@ -137,15 +118,11 @@ public class CarsController {
 
     @PostMapping("/cars/release/{id}")
     public String releaseCar(@PathVariable Long id) {
-        // Sécurité : Vérifier si l'utilisateur est connecté
-        if (userSession.isLoggedIn()) {
+        if (this.userSession.isLoggedOut()) {
             return "redirect:/login";
         }
 
-        // On pourrait aussi vérifier si la voiture appartient bien à l'utilisateur
-        // avant de le laisser la supprimer/rendre (Sécurité sup)
-
-        carService.releaseVoiture(id);
+        this.carService.releaseVoiture(id);
 
         return "redirect:/cars";
     }

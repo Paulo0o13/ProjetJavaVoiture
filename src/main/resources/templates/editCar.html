@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Modifier le véhicule</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" />
-    <link rel="stylesheet" th:href="@{/bg.css}" />
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/bg.css}"/>
 </head>
 <body class="d-flex flex-column" style="min-height: 100vh;">
 
@@ -20,34 +20,34 @@
 
             <div class="card glass-card shadow-lg">
                 <div class="card-body">
-                    <form th:action="@{/admin/save-edit}" th:object="${car}" method="post">
+                    <form method="post" th:action="@{/admin/save-edit}" th:object="${car}">
 
-                        <input type="hidden" th:field="*{id}" />
+                        <input th:field="*{id}" type="hidden"/>
 
                         <div class="mb-3">
                             <label class="form-label text-white">Marque</label>
-                            <input type="text" class="form-control" th:field="*{marque}" required />
+                            <input class="form-control" required th:field="*{marque}" type="text"/>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label text-white">Modèle</label>
-                            <input type="text" class="form-control" th:field="*{modele}" required />
+                            <input class="form-control" required th:field="*{modele}" type="text"/>
                         </div>
 
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="form-label text-white">Année</label>
-                                <input type="number" class="form-control" th:field="*{annee}" required />
+                                <input class="form-control" required th:field="*{annee}" type="number"/>
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="form-label text-white">Couleur</label>
-                                <input type="text" class="form-control" th:field="*{couleur}" required />
+                                <input class="form-control" required th:field="*{couleur}" type="text"/>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label text-white">Prix (€)</label>
-                            <input type="number" class="form-control" th:field="*{prix}" required />
+                            <input class="form-control" required th:field="*{prix}" type="number"/>
                         </div>
 
                         <div class="mb-3">
@@ -59,8 +59,8 @@
                         </div>
 
                         <div class="form-footer d-flex gap-2">
-                            <a th:href="@{/catalogue}" class="btn btn-outline-light w-100">Annuler</a>
-                            <button type="submit" class="btn btn-primary w-100">Enregistrer</button>
+                            <a class="btn btn-outline-light w-100" th:href="@{/catalogue}">Annuler</a>
+                            <button class="btn btn-primary w-100" type="submit">Enregistrer</button>
                         </div>
                     </form>
                 </div>
