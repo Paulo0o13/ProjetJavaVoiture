@@ -3,6 +3,7 @@ package org.example.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.model.enums.OfferType;
 
 @Getter
 @Setter
@@ -18,11 +19,12 @@ public class Car {
     public String modele;
     public String couleur;
     public int annee;
-
     private Double prix;
-    private String typeOffre;
-    private boolean disponible = true;
 
+    @Enumerated(EnumType.STRING)
+    private OfferType typeOffre;
+
+    private boolean disponible = true;
 
     @ManyToOne
     @JoinColumn(name = "user_pseudo")

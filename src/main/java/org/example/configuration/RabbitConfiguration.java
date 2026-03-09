@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfiguration {
 
-    // Noms des files imposés par la consigne
     public static final String REQUEST_QUEUE = "credit.request.queue";
     public static final String RESPONSE_QUEUE = "credit.response.queue";
 

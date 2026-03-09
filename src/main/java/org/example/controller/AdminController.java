@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.model.Car;
+import org.example.model.enums.RoleType;
 import org.example.repository.CarRepository;
 import org.example.service.CarService;
 import org.example.session.UserSession;
@@ -23,15 +24,13 @@ public class AdminController {
         this.carRepository = carRepository;
     }
 
-    // Méthode utilitaire pour vérifier si l'utilisateur est bien ADMIN
     private boolean isAdmin() {
-        return userSession.isLoggedIn() && "ADMIN".equals(userSession.getUser().getRole());
+        return this.userSession.isLoggedIn() && this.userSession.getUser().getRole() != null && this.userSession.getUser().getRole().equals(RoleType.ADMIN);
     }
 
-    // 1. Afficher le formulaire d'ajout
     @GetMapping("/add-car")
     public String showAddForm(Model model) {
-        if (!isAdmin()){
+        if (this.isAdmin()) {
             return "redirect:/login";
         }
 
@@ -43,7 +42,7 @@ public class AdminController {
 
     @PostMapping("/add-car")
     public String addCarToCatalogue(@ModelAttribute Car car) {
-        if (!isAdmin()){
+        if (this.isAdmin()) {
             return "redirect:/login";
         }
         car.setOwner(null);
@@ -55,12 +54,12 @@ public class AdminController {
 
     @GetMapping("/delete/{id}")
     public String deleteCar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        if (!isAdmin()){
+        if (this.isAdmin()) {
             return "redirect:/login";
         }
 
         try {
-            carService.deleteCar(id);
+            this.carService.deleteCar(id);
             redirectAttributes.addFlashAttribute("success", "Annonce supprimée.");
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -69,25 +68,25 @@ public class AdminController {
         return "redirect:/catalogue";
     }
 
-    // 1. Affiche le formulaire avec les infos de la voiture
     @GetMapping("/edit-car/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        if (!isAdmin()) return "redirect:/login";
+        if (this.isAdmin()) {
+            return "redirect:/login";
+        }
 
-        Car car = carRepository.findById(id).orElseThrow();
+        Car car = this.carRepository.findById(id).orElseThrow();
         model.addAttribute("car", car);
-        model.addAttribute("loggedUser", userSession.getUser());
+        model.addAttribute("loggedUser", this.userSession.getUser());
         return "editCar"; // Crée ce fichier HTML
     }
 
-    // 2. Reçoit la voiture modifiée et l'enregistre
     @PostMapping("/save-edit")
     public String saveEdit(@ModelAttribute("car") Car car) {
-        if (!isAdmin()) return "redirect:/login";
+        if (this.isAdmin()) {
+            return "redirect:/login";
+        }
 
-        // IMPORTANT : Puisque l'ID est présent dans l'objet 'car',
-        // .save() va faire un UPDATE au lieu d'un INSERT.
-        carRepository.save(car);
+        this.carRepository.save(car);
 
         return "redirect:/catalogue";
     }

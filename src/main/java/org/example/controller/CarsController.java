@@ -40,7 +40,7 @@ public class CarsController {
 
     @GetMapping("/car")
     public String showForm(Model model) {
-        if (!userSession.isLoggedIn()){
+        if (userSession.isLoggedIn()){
             return "redirect:/login";
         }
 
@@ -51,7 +51,7 @@ public class CarsController {
 
     @PostMapping("/car")
     public String addOneCar(@ModelAttribute("car") Car car) {
-        if (!userSession.isLoggedIn()) {
+        if (userSession.isLoggedIn()) {
             return "redirect:/login";
         }
 
@@ -62,7 +62,7 @@ public class CarsController {
 
     @GetMapping("/cars")
     public String findAllCars(Model model) {
-        if (!userSession.isLoggedIn()) {
+        if (userSession.isLoggedIn()) {
             return "redirect:/login";
         }
         model.addAttribute("loggedUser", userSession.getUser());
@@ -76,7 +76,7 @@ public class CarsController {
     public String showCatalogue(Model model) {
         List<Car> cars = carRepository.findByDisponibleTrue();
         model.addAttribute("cars", cars);
-        if (!userSession.isLoggedIn()) {
+        if (userSession.isLoggedIn()) {
             return "redirect:/login";
         }
         model.addAttribute("loggedUser", userSession.getUser());
@@ -95,7 +95,7 @@ public class CarsController {
 
     @GetMapping("/buy/{id}")
     public String buyCar(@PathVariable Long id) {
-        if (!userSession.isLoggedIn()) {
+        if (userSession.isLoggedIn()) {
             return "redirect:/login";
         }
 
@@ -121,7 +121,7 @@ public class CarsController {
     @GetMapping("/catalogue/data")
     public String getCatalogueData(Model model) {
         // Si l'utilisateur n'est pas connecté, on ne lui envoie rien
-        if (!userSession.isLoggedIn()) {
+        if (userSession.isLoggedIn()) {
             model.addAttribute("cars", new ArrayList<Car>()); // Liste vide
             return "catalogue :: #car-list";
         }
@@ -138,7 +138,7 @@ public class CarsController {
     @PostMapping("/cars/release/{id}")
     public String releaseCar(@PathVariable Long id) {
         // Sécurité : Vérifier si l'utilisateur est connecté
-        if (!userSession.isLoggedIn()) {
+        if (userSession.isLoggedIn()) {
             return "redirect:/login";
         }
 

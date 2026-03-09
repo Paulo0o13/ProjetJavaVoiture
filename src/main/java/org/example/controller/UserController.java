@@ -2,11 +2,15 @@ package org.example.controller;
 
 
 import org.example.model.User;
+import org.example.model.enums.RoleType;
 import org.example.repository.UserRepository;
 import org.example.session.UserSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -28,14 +32,14 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@RequestParam String pseudo, @RequestParam String password) {
-        User user = userRepository.findById(pseudo).orElse(null);
+        User user = this.userRepository.findById(pseudo).orElse(null);
 
         if (user != null && user.getPassword().equals(password)) {
-            userSession.setUser(user);
+            this.userSession.setUser(user);
 
-            if("ADMIN".equals(user.getRole())) {
+            if (user.getRole() == RoleType.ADMIN) {
                 return "redirect:/catalogue";
-            }else{
+            } else {
                 return "redirect:/cars";
             }
 
@@ -52,18 +56,19 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute User user) {
-        if (userRepository.existsById(user.getPseudo())) {
+
+        if (this.userRepository.existsById(user.getPseudo())) {
             return "redirect:/register?exists";
         }
 
-        user.setRole("USER");
-        userRepository.save(user);
+        user.setRole(RoleType.USER);
+        this.userRepository.save(user);
         return "redirect:/login";
     }
 
     @GetMapping("/logout")
     public String logout() {
-        userSession.setUser(null);
+        this.userSession.setUser(null);
         return "redirect:/login";
     }
 }

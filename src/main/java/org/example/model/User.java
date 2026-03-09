@@ -3,6 +3,7 @@ package org.example.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.model.enums.RoleType;
 
 @Getter
 @Setter
@@ -15,5 +16,7 @@ public class User {
     public String pseudo;
 
     public String password;
-    private String role;
+
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
 }

@@ -1,12 +1,11 @@
 package org.example.session;
 
-
-import org.example.model.User;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.model.User;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
+
 import java.io.Serializable;
 
 @Component
@@ -17,6 +16,6 @@ public class UserSession implements Serializable {
     private User user;
 
     public boolean isLoggedIn() {
-        return user != null;
+        return this.user != null;
     }
 }
