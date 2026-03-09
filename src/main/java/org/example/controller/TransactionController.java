@@ -16,10 +16,9 @@ public class TransactionController {
 
     public TransactionController(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
-
     }
 
-    @PostMapping("/buy-vehicle") // Remplace ton /sendMessage
+    @PostMapping("/buy-vehicle")
     public ResponseEntity<?> buyVehicle(@RequestParam("carId") Long carId,
                                         @RequestParam("price") double price,
                                         @RequestParam("type") String type) {
