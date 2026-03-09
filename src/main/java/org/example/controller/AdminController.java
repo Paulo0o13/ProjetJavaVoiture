@@ -47,7 +47,7 @@ public class AdminController {
         }
         car.setOwner(null);
         car.setDisponible(true);
-        carService.saveCar(car);
+        this.carService.saveCar(car);
 
         return "redirect:/catalogue";
     }
