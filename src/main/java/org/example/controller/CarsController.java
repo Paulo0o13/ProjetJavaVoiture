@@ -75,7 +75,9 @@ public class CarsController {
 
 
     @PostMapping("/buy/{id}")
-    public String buyCar(@PathVariable Long id, @RequestParam("IBAN") String iban) {
+    public String buyCar(@PathVariable Long id,
+                         @RequestParam("numeroCarte") String numeroCarte,
+                         @RequestParam("cryptogramme") String cryptogramme) {
         if (this.userSession.isLoggedOut()) {
             return "redirect:/login";
         }
@@ -88,7 +90,8 @@ public class CarsController {
         // 2. On crée la requête pour la banque
         Map<String, Object> creditRequest = new HashMap<>();
         creditRequest.put("transactionId", transactionId.toString());
-        creditRequest.put("userId", iban);
+        creditRequest.put("numeroCarte", numeroCarte);
+        creditRequest.put("cryptogramme", cryptogramme);
         creditRequest.put("amount", car.getPrix());
         creditRequest.put("operationType", car.getTypeOffre().name());
 

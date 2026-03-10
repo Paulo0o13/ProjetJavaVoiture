@@ -118,10 +118,15 @@
                     </style>
 
                     <div class="mb-3">
-                        <label class="form-label text-white">IBAN</label>
-                        <input class="form-control" name="IBAN" placeholder="FR76 0000 0000 0000 0000 0000 000"
-                               required title="Veuillez saisir un IBAN valide"
-                               type="text">
+                        <label class="form-label text-white">Numéro de carte</label>
+                        <input class="form-control" name="numeroCarte" placeholder="1234 5678 **** ****"
+                               required type="text">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-white">Cryptogramme (CVV)</label>
+                        <input class="form-control" name="cryptogramme" placeholder="***"
+                               maxlength="3" required type="password">
                     </div>
 
                     <div class="text-muted mt-2 d-flex align-items-center"
