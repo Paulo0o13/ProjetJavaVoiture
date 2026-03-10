@@ -9,15 +9,9 @@ import org.example.session.UserSession;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class CarsController {
@@ -34,14 +28,13 @@ public class CarsController {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-
     @GetMapping("/car")
     public String showForm(Model model) {
         if (this.userSession.isLoggedOut()) {
             return "redirect:/login";
         }
 
-        model.addAttribute("loggedUser", userSession.getUser());
+        model.addAttribute("loggedUser", this.userSession.getUser());
         model.addAttribute("car", new Car());
         return "formCar";
     }
@@ -52,7 +45,7 @@ public class CarsController {
             return "redirect:/login";
         }
 
-        car.setOwner(userSession.getUser());
+        car.setOwner(this.userSession.getUser());
         this.carService.saveCar(car);
         return "redirect:/cars";
     }
@@ -76,13 +69,13 @@ public class CarsController {
         if (this.userSession.isLoggedOut()) {
             return "redirect:/login";
         }
-        model.addAttribute("loggedUser", userSession.getUser());
+        model.addAttribute("loggedUser", this.userSession.getUser());
         return "catalogue";
     }
 
 
-    @GetMapping("/buy/{id}")
-    public String buyCar(@PathVariable Long id) {
+    @PostMapping("/buy/{id}")
+    public String buyCar(@PathVariable Long id, @RequestParam("IBAN") String iban) {
         if (this.userSession.isLoggedOut()) {
             return "redirect:/login";
         }
@@ -90,11 +83,14 @@ public class CarsController {
         Car car = this.carRepository.findById(id).orElseThrow();
         User buyer = this.userSession.getUser();
 
+        UUID transactionId = this.carService.memoriserTransaction(id, buyer.getPseudo());
+
+        // 2. On crée la requête pour la banque
         Map<String, Object> creditRequest = new HashMap<>();
-        creditRequest.put("userId", buyer.getPseudo());    // Identifiant [cite: 32]
-        creditRequest.put("amount", car.getPrix());        // Montant [cite: 33]
-        creditRequest.put("operationType", car.getTypeOffre()); // Type [cite: 34]
-        creditRequest.put("carId", id); // Indispensable pour la réponse plus tard
+        creditRequest.put("transactionId", transactionId.toString());
+        creditRequest.put("userId", iban);
+        creditRequest.put("amount", car.getPrix());
+        creditRequest.put("operationType", car.getTypeOffre().name());
 
         this.rabbitTemplate.convertAndSend(RabbitConfiguration.REQUEST_QUEUE, creditRequest);
 

@@ -4,6 +4,7 @@ import org.example.model.Car;
 import org.example.model.User;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public interface CarService {
@@ -17,5 +18,10 @@ public interface CarService {
     void deleteCar(Long carId);
 
     void releaseVoiture(Long carId);
+
+    UUID memoriserTransaction(Long carId, String pseudo);
+
+    CarServiceImpl.TransactionInfo recupererEtNettoyerTransaction(UUID transactionId);
+
 
 }

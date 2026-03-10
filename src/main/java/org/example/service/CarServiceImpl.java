@@ -7,11 +7,15 @@ import org.example.repository.CarRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
+    private final Map<UUID, TransactionInfo> transactionsEnAttente = new ConcurrentHashMap<>();
 
     public CarServiceImpl(CarRepository carRepository) {
         this.carRepository = carRepository;
@@ -61,4 +65,21 @@ public class CarServiceImpl implements CarService {
             this.carRepository.delete(car);
         }
     }
+
+    @Override
+    public UUID memoriserTransaction(Long carId, String pseudo) {
+        UUID transactionId = UUID.randomUUID();
+        this.transactionsEnAttente.put(transactionId, new TransactionInfo(carId, pseudo));
+        return transactionId;
+    }
+
+    @Override
+    public TransactionInfo recupererEtNettoyerTransaction(UUID transactionId) {
+        return this.transactionsEnAttente.remove(transactionId);
+    }
+
+    public record TransactionInfo(Long carId, String pseudoAcheteur) {
+    }
+
+
 }

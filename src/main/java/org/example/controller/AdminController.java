@@ -35,7 +35,7 @@ public class AdminController {
         }
 
         model.addAttribute("car", new Car());
-        model.addAttribute("loggedUser", userSession.getUser());
+        model.addAttribute("loggedUser", this.userSession.getUser());
         return "formCarAdmin";
     }
 
@@ -64,7 +64,6 @@ public class AdminController {
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-
         return "redirect:/catalogue";
     }
 
@@ -77,7 +76,7 @@ public class AdminController {
         Car car = this.carRepository.findById(id).orElseThrow();
         model.addAttribute("car", car);
         model.addAttribute("loggedUser", this.userSession.getUser());
-        return "editCar"; // Crée ce fichier HTML
+        return "editCar";
     }
 
     @PostMapping("/save-edit")
@@ -85,9 +84,7 @@ public class AdminController {
         if (this.isNotAdmin()) {
             return "redirect:/login";
         }
-
         this.carRepository.save(car);
-
         return "redirect:/catalogue";
     }
 }
