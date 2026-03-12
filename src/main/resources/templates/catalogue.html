@@ -199,12 +199,12 @@
             });
         }
 
-
+        const pseudo = "[[${loggedUser != null ? loggedUser.pseudo : ''}]]";
         const socket = new SockJS('/ws-notifications');
         const stompClient = Stomp.over(socket);
         stompClient.debug = null;
         stompClient.connect({}, function (frame) {
-            stompClient.subscribe('/topicAchat/resultatMess', function (message) {
+            stompClient.subscribe('/topicAchat/resultatMess'+pseudo, function (message) {
                 const data = JSON.parse(message.body);
 
                 if (data.approved) {
