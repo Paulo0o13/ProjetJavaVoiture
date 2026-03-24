@@ -87,7 +87,6 @@ public class CarsController {
 
         UUID transactionId = this.carService.memoriserTransaction(id, buyer.getPseudo());
 
-        // 2. On crée la requête pour la banque
         Map<String, Object> creditRequest = new HashMap<>();
         creditRequest.put("transactionId", transactionId.toString());
         creditRequest.put("numeroCarte", numeroCarte);
