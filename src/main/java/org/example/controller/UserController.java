@@ -42,9 +42,7 @@ public class UserController {
             } else {
                 return "redirect:/cars";
             }
-
         }
-
         return "redirect:/login?error";
     }
 

@@ -6,6 +6,7 @@ import org.example.repository.UserRepository;
 import org.example.service.CarService;
 import org.example.service.CarServiceImpl;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ public class TransactionListener {
     private final CarService carService;
     private final UserRepository userRepository;
     private final SimpMessagingTemplate messagingTemplate;
+
 
     public TransactionListener(CarService carService, UserRepository userRepository, SimpMessagingTemplate messagingTemplate) {
         this.carService = carService;
@@ -63,6 +65,7 @@ public class TransactionListener {
         Map<String, Object> wsMessage = new HashMap<>();
         wsMessage.put("approved", approved);
 
-        messagingTemplate.convertAndSend("/topicAchat/resultatMess", wsMessage);
+        String pseudoAcheteur = info.pseudoAcheteur();
+        messagingTemplate.convertAndSend("/topicAchat/resultatMess"+pseudoAcheteur, wsMessage);
     }
 }
